@@ -1,0 +1,482 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+html{
+  font-family: sans-serif;
+}
+#canvasWrapper {
+  position: relative;
+  max-width: 500px;
+}
+
+.canvas{
+  background-color: #E10E0E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 500px;
+  height: 500px;
+}
+
+.canvas::before{
+ position: absolute; content:url('http://nartshop.in/wp-content/uploads/2023/08/sq-mocks.png');
+  z-index:100;
+  height: 500px;
+  width: 500px;
+  pointer-events: none;
+
+}
+
+@media only screen and (max-width: 1020px) {
+  .canvas {
+/*     transform-origin: -10px -10px;
+    transform:scale(.8);
+    padding:16px; */
+    position: relative;
+  }
+}
+.bg-controls{
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+}
+label{
+  font-size: 12px
+}
+.textip{
+    widt: 100%;
+    min-width: 220px;
+    border-radius: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border: none;
+  }
+.textip:active,select:active{
+  border: 0px;
+  box-shadow: inset 0px 0px 0px 2.2px #0cad7d;
+  outline: none;
+}
+.textip:focus,.textip:focus-visible,select:focus,select:focus-visible{
+  border: 0px;
+  box-shadow: inset 0px 0px 0px 2.2px #0cad7d;
+  outline: none;
+}
+.lavel-color{
+  position: relative;
+  border-radius: 6px;
+  width: 100%;
+  height: 36px;
+  padding: 2px 12px;
+/*   -moz-appearance:none; /* Firefox 
+  -webkit-appearance:none; /* Safari and Chrome 
+  appearance:none; */
+}
+
+.colorip{
+  padding: 0 2px !important;
+  width: 100%
+  }
+#tshirtCanvas {
+  position: absolute;
+  border: 1px solid #ccc;
+}
+.label-color{
+/*   font-size: 12px; */
+}
+.flex{
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  }
+.button{
+/*   flex: 1; */
+  background: #205060; 
+  color: white;
+  font-weight: 600;
+  height: 36px;
+  border: 0px;
+  padding: 0px 12px;
+  border-radius: 6px;
+  transition: all 300ms ease;
+  }
+.button:hover{
+  background: #356575; 
+}
+.button:active{
+  background: #306070; 
+}
+#designPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /*position: absolute;*/
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+.text-controls{
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+.text-controls>* ,
+.controls > *{
+/*   margin: 5px; */
+  height 36px;
+}
+
+.design-library {
+  margin-top:5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+.design-thumb {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.text-controls {
+  margin-top: 0px;
+}
+
+
+</style>
+<!-- Step 3: Include Fabric.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<div class="wp-block-column is-layout-flow" style="flex-basis:512px">
+			<div data-block-name="woocommerce/product-image-gallery" class="wp-block-woocommerce-product-image-gallery ">
+        sudbvkjsbdkvsdvbsbvisjvs
+	</div>
+</div>
+
+
+<!-- Step 4: HTML Structure -->
+<div id="canvasWrapper">
+  <div id="designPanel">
+    <div class="bg-controls">
+      <label for="bgColorPicker" style="margin" class="label-color tshirt-label">Tshirt color</label>
+      <input class="textip colorip" type="color" id="bgColorPicker" value="#E10E0E">
+    </div>
+    <div class="flex">
+<!--       <button class="button" id="addTextBtn">Add Text</button> -->
+      <button class="button" id="uploadDesignBtn">Upload Design</button>
+      <input type="file" id="designFileInput" style="display: none;" accept="image/*">
+      <button class="button" id="deleteBtn">Delete selected</button>
+    </div>
+    <div class="design-library">
+      <!-- Include your categorized library of designs here -->
+      <img src="http://nartshop.in/wp-content/uploads/2023/08/nartw.svg" class="design-thumb">
+      <img src="http://nartshop.in/wp-content/uploads/2023/07/Group-5.svg" class="design-thumb">
+      <!-- Add more design thumbnails as needed -->
+    </div>
+    <div class="text-controls">
+      <input class="textip" type="text" id="textInput" placeholder="Enter text to add">
+      <div class="controls">
+        <button class="button" id="addTextBtn"> Add text </button>
+        <button class="button" id="applyTextBtn"> Apply style</button>
+      </div>
+      <div class="flex">
+      <label for="bgColorPicker">Text Color</label>
+      <input  class="textip colorip" type="color" id="textColorPicker" value="#000000">
+        </div>
+        <div class="flex">
+      <label for="bgColorPicker">Font</label>
+      <select id="textFontPicker"  class="lavel-color">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Helvetica">Helvetica</option>
+      <option value="Roboto">Roboto</option>
+      <option value="Bebas Neue">Bebas Neue</option>
+      <option value="Lobster">Lobster</option>
+      <option value="Pacifico">Pacifico</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Oswald">Oswald</option>
+      <option value="Quicksand">Quicksand</option>
+      <option value="Playfair Display">Playfair Display</option>
+      <option value="Cabin">Cabin</option>
+      <option value="Raleway">Raleway</option>
+    </select>
+          <div class="flex">
+            <label for="fontWeightPicker">Font weight</label>
+            <select id="fontWeightPicker" class="lavel-color">
+              <option value="normal">Normal</option>
+              <option value="bold">Bold</option>
+              <option value="bolder">Bolder</option>
+              <option value="lighter">Lighter</option>
+            </select>
+          </div>
+          <button id="confirmDesignBtn" class="button">Confirm design</button>
+<!--       <button class="button" id="downloadBtn"> Download design</button> -->
+<!-- <div class="canvas">
+    <canvas id="tshirtCanvas" width="200" height="250">
+  </canvas> -->
+    </div>
+    </div>
+      </div>
+
+  
+  </div>
+<script>
+  
+  <!-- Step 6: JavaScript Code -->
+
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    const canvasContainer = document.querySelector('.wp-block-woocommerce-product-image-gallery');
+  canvasContainer.innerHTML = '<div class="canvas"><canvas id="tshirtCanvas" width="200" height="250"></canvas></div>';
+
+  const canvas = new fabric.Canvas("tshirtCanvas", {
+    backgroundColor: "transparent",
+  });
+    
+    // Add an image of a blank t-shirt (you can use your own image)
+    // fabric.Image.fromURL(
+    //   "http://nartshop.in/wp-content/uploads/2023/08/sq-mocks.png",
+    //   function (img) {
+    //     canvas.add(img);
+    //     canvas.renderAll();
+    //   },
+    //   {
+    //     left: 0,
+    //     top: 0,
+    //     width: 500,
+    //     height: 500,
+    //     selectable: false, // Set to false to prevent selecting the t-shirt image
+    //   }
+    // );
+
+    // Add a function to load and add a design from the library
+    function addDesignToCanvas(url) {
+      fabric.Image.fromURL(url, function (img) {
+        canvas.add(img);
+        img.center();
+        canvas.sendToBack(img);
+        canvas.setActiveObject(img);
+        canvas.renderAll();
+      });
+    }
+
+    // Event listeners for design thumbnails
+    const designThumbs = document.querySelectorAll(".design-thumb");
+    designThumbs.forEach((thumb) => {
+      thumb.addEventListener("click", function () {
+        addDesignToCanvas(this.src);
+      });
+    });
+
+    // Function to add text to the canvas
+    function addText() {
+      const text = new fabric.IText("Your Text", {
+        left: 250,
+        top: 100,
+        fontSize: 30,
+        fill: "#000000",
+      });
+      canvas.add(text);
+      canvas.sendToFront(text);
+      canvas.setActiveObject(text);
+      canvas.renderAll();
+    }
+
+    // Function to add text with selected font and color
+    function addText() {
+      const textInput = document.getElementById("textInput");
+      const fontPicker = document.getElementById("textFontPicker");
+      const textColorPicker = document.getElementById("textColorPicker");
+
+      const selectedFont = fontPicker.value;
+      const selectedColor = textColorPicker.value;
+      const text = textInput.value;
+
+      if(text==""){
+        const text = new fabric.IText("Your Text", {
+          left: 50,
+          top: 100,
+          fontSize: 30,
+          fontFamily: selectedFont,
+          fill: selectedColor,
+        });
+        canvas.add(text);
+        canvas.sendToBack(text);
+        canvas.setActiveObject(text);
+        canvas.renderAll();
+      }
+      else{
+        const textadd = new fabric.IText(text, {
+        left: 50,
+        top: 100,
+        fontFamily: selectedFont,
+        fill: selectedColor,
+        fontSize: 30,
+      });
+      canvas.add(textadd);
+      canvas.sendToBack(textadd);
+      canvas.setActiveObject(textadd);
+      canvas.renderAll();
+      }
+    }
+   
+    // Function to deselect the current selection
+    function deselectSelection() {
+      const activeObject = canvas.getActiveObject();
+      if (activeObject) {
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+    }
+    
+    // Function to download the design image with transparent background
+    function downloadDesignImage() {
+      // Get the canvas element
+      const canvas = document.getElementById("tshirtCanvas");
+      // Set the export multiplier
+      const exportMultiplier = 2; // You can adjust this value as needed
+
+      // Get the scaled canvas dimensions
+      const scaledWidth = canvas.width * exportMultiplier;
+      const scaledHeight = canvas.height * exportMultiplier;
+
+      // Temporarily scale the canvas for export
+      canvas.width = scaledWidth;
+      canvas.height = scaledHeight;
+
+      
+      // Convert the canvas content to a data URL with transparent background
+      const designImageURL = canvas.toDataURL("image/png"); 
+
+      // Restore the original canvas dimensions
+      canvas.width = canvas.width / exportMultiplier;
+      canvas.height = canvas.height / exportMultiplier;
+      
+      // Create a link element for the download
+      const downloadLink = document.createElement("a");
+      downloadLink.href = designImageURL;
+      downloadLink.download = "custom_tshirt_design.png";
+      downloadLink.target = "_blank";
+
+      // Trigger the download
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+
+    
+       // Function to apply text with selected font and color
+    function applyText() {
+      const textInput = document.getElementById("textInput");
+      const fontPicker = document.getElementById("textFontPicker");
+      const textColorPicker = document.getElementById("textColorPicker");
+
+      const selectedFont = fontPicker.value;
+      const selectedColor = textColorPicker.value;
+      const text = textInput.value;
+
+      const activeObject = canvas.getActiveObject();
+
+      if (activeObject && activeObject.type === "i-text") {
+        activeObject.set({
+          fontFamily: selectedFont,
+          fill: selectedColor,
+        });
+        canvas.renderAll();
+      }
+    }
+   
+    // Function to confirm and export the design
+    function confirmDesign() {
+      const canvasClone = canvas.lowerCanvasEl.cloneNode(true);
+      const canvasWrapper = document.getElementById("canvasWrapper");
+      canvasWrapper.appendChild(canvasClone);
+
+      html2canvas(canvasClone, {
+        backgroundColor: null,
+        scale: 3,
+        ignoreWarnings: true, // Ignore tinted canvas warning
+      }).then((renderedCanvas) => {
+        canvasWrapper.removeChild(canvasClone);
+        const designImage = renderedCanvas.toDataURL("image/png");
+
+        // TODO: Send the designImage to your server or handle it as needed (e.g., add to order).
+      });
+    }
+   
+
+    // Event listeners for buttons
+    // const addTextBtn = document.getElementById("addTextBtn");
+    // addTextBtn.addEventListener("click", addText);
+    
+    const confirmDesignBtn = document.getElementById("confirmDesignBtn");
+    confirmDesignBtn.addEventListener("click", function() {
+      deselectSelection();
+      confirmDesign();
+      downloadDesignImage();
+    });
+    
+    function deleteSelectedObject() {
+      const activeObject = canvas.getActiveObject();
+      if (activeObject) {
+        canvas.remove(activeObject);
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+    }
+   // Event listener for the "Delete" key and "Backspace" key
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Delete") {
+        deleteSelectedObject();
+      }
+    });
+   
+    const applyTextBtn = document.getElementById("applyTextBtn");
+    applyTextBtn.addEventListener("click", applyText);
+    const addTextBtn = document.getElementById("addTextBtn");
+    addTextBtn.addEventListener("click", addText);
+    const uploadDesignBtn = document.getElementById("uploadDesignBtn");
+    const designFileInput = document.getElementById("designFileInput");
+    uploadDesignBtn.addEventListener("click", function () {
+      designFileInput.click();
+    });
+    // Function to apply the background color to the canvas
+    function applyBackgroundColor() {
+      const bgColorPicker = document.getElementById("bgColorPicker");
+      const bgColor = bgColorPicker.value;
+      // canvas.setBackgroundColor(bgColor, canvas.renderAll.bind(canvas));
+      document.getElementsByClassName("canvas")[0].style.background=bgColor;
+    }
+
+    // Event listener for background color picker
+    const bgColorPicker = document.getElementById("bgColorPicker");
+    bgColorPicker.addEventListener("change", applyBackgroundColor);
+  
+    // Event listener for design file input
+    designFileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const url = event.target.result;
+        addDesignToCanvas(url);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const deleteBtn = document.getElementById("deleteBtn");
+    deleteBtn.addEventListener("click", function () {
+      deleteSelectedObject()
+    });
+  });
+</script>
